@@ -180,8 +180,7 @@ def get_gain(training_data, test_attri):
 # In[31]:
 
 
-def generator_DT(training_data):
-    attribute_list = get_attribute_list(training_data)
+def generator_DT(training_data,attribute_list):
     node = ""      # don't know the data structure of it yet
     branch = {}
     tree = (node,branch)
@@ -190,12 +189,12 @@ def generator_DT(training_data):
     for num in counter_num_each_class(training_data):      #checking number in each class
         if num[1] == len(training_data):               #if it equal to the length of the data set, means all samples in same class
             node = num[0]                                 #label it with that class
-            branch = None                                  #indecate it as a leaf node
+            branch = {}                                 #indecate it as a leaf node
 
     # 3rd step of ID3
     if len(attribute_list) == 0:     #checking the length of the attribute
-        node = most_common_class()      #label it with the most common class
-        branch = None                    #indecate it as a leaf node
+        node = most_common_class(training_data)      #label it with the most common class
+        branch = {}                    #indecate it as a leaf node
 
     # 4th step, Select test-attribute, the attribute among attribute-list with the highest information gain
     test_attri = attribute_list[0]  #  initialize a test attribute as the first element of attribute list
@@ -222,10 +221,10 @@ def generator_DT(training_data):
 
         sub_set_of_data = []
         for sample in training_data:
-            if value in sample[0]:
+            if value in sample[0].values():
                 sub_set_of_data.append(sample)            # ii creating si
         if len(sub_set_of_data) == 0:                       # iii
-            newNode = (common_in_parent,None)
+            newNode = (common_in_parent,{})
         else:
             newNode = generator_DT(sub_set_of_data, attribute_list.remove(test_attri))     #iv 
             
